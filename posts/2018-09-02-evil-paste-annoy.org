@@ -1,0 +1,38 @@
+#+title: annoyance with paste in Evil visual mode
+#+date: <2018-09-02 22:16>
+#+description: Evil mode is really nice, but needs some tweaks.
+#+filetags: Emacs EVIL-mode
+
+I like ~Evil~ mode and use it all the time with my Emacs configuration.
+
+One thing I often do is copy some text with ~y~ and select some text in ~visual mode~ followed by using ~p~ or ~P~ to replace it with what I have just copied.
+
+However what really annoys me is that every time after I press ~p~ or ~P~ ,
+the content(ie. visual selection) being replaced is saved to the top of ~kill-ring~ which ruined my next paste operation with ~p~ or ~P~ since ~kill-ring~ has been changed.
+
+After consulting the [[https://github.com/Wilfred/helpful][helpful]], it shows that command invoked for pasting in visual mode is ~evil-visual-paste~ defined in ~evil-commands.el~.
+
+Skimming through the function, this line is what I'm looking for:
+
+#+BEGIN_SRC lisp
+(when evil-kill-on-visual-paste
+        (kill-new new-kill))
+#+END_SRC
+
+Basically it will save whatever in visual selection and push it to the top of ~kill-ring~ if variable ~evil-kill-on-visual-paste~ is true.
+
+This variable is defined here as following (in ~evil-vars.el~):
+
+#+BEGIN_SRC lisp
+(defcustom evil-kill-on-visual-paste t
+  "Whether ~evil-visual-paste' adds the replaced text to the kill
+ring, making it the default for the next paste. The default, t,
+replicates the default vim behavior."
+  :type 'boolean
+  :group 'evil)
+#+END_SRC
+
+So by setting this variable to false that annoyance goes away:
+#+BEGIN_SRC lisp
+(setq evil-kill-on-visual-paste nil)
+#+END_SRC

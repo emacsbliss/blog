@@ -1,0 +1,79 @@
+#+title: search replace with Emacs
+#+date: <2019-02-17 22:09>
+#+description: Search (and replace) is something I do so much in emacs, it's worth tinkering the workflow
+#+filetags: Emacs
+
+Search (and replace) is something I do so much in emacs, I want to
+share my typical workflow for it.
+
+* search in buffer(s)
+For this purpose, I like to use ~swiper~ [fn:1] which I bind to ~C-s~.
+
+~swiper~ searches inside current buffer and list all matches in minibuffer.
+To search in all open buffers, use ~swiper-all~ instead.
+
+Sometimes I just prefer simple search like the classic vim way, then I use ~/~
+which maps to ~evil-ex-search-forward~ from ~evil mode~ [fn:2].
+
+It behaves exactly like what you do with ~/~ in vim normal mode.
+
+* search in directories
+** rg
+So far ~ripgrep(rg)~ [fn:3] seems to be the fatest search tool around and many
+Emacs packages use it as backend.
+
+By default ~rg~ respects ~.gitignore~ file but if you want it to search
+everything, you can use ~--no-ignore-vcs~ switch.
+
+Sometimes it finds things from the file I don't want, to prevent that,
+add a file with name ~.ignore~ at the root of git repo as described here [fn:4]:
+
+#+BEGIN_EXAMPLE
+/TAGS
+*.min.js*
+/Build/Output/
+/ThirdParty/
+#+END_EXAMPLE
+
+** counsel-rg
+My favorite Emacs package for searching is ~counsel-rg~ [fn:5] and I bind it to ~C-/~.
+It uses ~rg~ as backend.
+
+~counsel-rg~ by default looks for a directory with ~.git~ and starts a search from
+there.
+
+To limit the scope to current directory and its sub directories, not where
+~.git~ is, use ~prefix argument~ before running ~counsel-rg~ then select
+which directory you want to run ~rg~ on.
+
+** deadgrep
+~deadgrep~ [fn:6] is another package which uses ~rg~ as backend for searching.
+
+It has many features and allow filtering to be done more easier than
+~counsel-rg~.
+
+One notable feature is search on remote host:
+#+BEGIN_QUOTE
+If you're editing a remote file with Tramp, deadgrep will search the remote machine. This requires rg to be installed on that machine.
+#+END_QUOTE
+* replace in multiple files
+For this purpose, this great blog post [fn:7] describes it in detail.
+It use ~counsel-ag~ but same thing works for ~counsel-rg~
+which is the one I use.
+
+In short, workflow is something like this:
+
+- =C-/= (~counsel-rg~)
+- type search pattern
+- ~C-c C-o~ (=ivy-occur=) which saves result into a buffer
+- ~C-x C-q~ (=ivy-wgrep-change-to-wgrep-mode=) in ~ivy-occur~ buffer
+- ~:%s/from/to/g~ to do the replace
+- ~C-c C-c~ (=wgrep-finish-edit=) save the changes
+
+[fn:1] https://github.com/abo-abo/swiper
+[fn:2] https://github.com/emacs-evil/evil
+[fn:3] https://github.com/BurntSushi/ripgrep
+[fn:4] https://oremacs.com/2018/03/05/grep-exclude/
+[fn:5] https://oremacs.com/2017/08/04/ripgrep/
+[fn:6] https://github.com/Wilfred/deadgrep
+[fn:7] https://sam217pa.github.io/2016/09/11/nuclear-power-editing-via-ivy-and-ag/
