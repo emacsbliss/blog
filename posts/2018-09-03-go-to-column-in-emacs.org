@@ -1,0 +1,18 @@
+#+TITLE: Go to column in Emacs
+#+date: <2018-08-03 21:18>
+#+description: Simple thing but sometimes useful.
+#+filetags: Emacs Evil-mode
+
+I was looking for a command/function to jump to a specific column in emacs.
+It turned out there is already one built in emacs: ~move-to-column~ and is bind to ~M-g Tab~.
+
+Even better ~Evil~ has already defined a command ~evil-goto-column~ and
+by default it's bind to ~|~.
+
+So to jump to column 10 in evil normal mode, do this:
+
+#+BEGIN_EXAMPLE
+10 |
+#+END_EXAMPLE
+
+NOTE: column number is *0 based*

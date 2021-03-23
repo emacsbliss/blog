@@ -4,7 +4,7 @@
 <title><![CDATA[EmacsBliss]]></title>
 <description><![CDATA[EmacsBliss]]></description>
 <link>https://emacsbliss.com/</link>
-<lastBuildDate>Sun, 21 Mar 2021 22:14:56 -0400</lastBuildDate>
+<lastBuildDate>Mon, 22 Mar 2021 22:27:56 -0400</lastBuildDate>
 <item>
   <title><![CDATA[search replace with Emacs]]></title>
   <description><![CDATA[
@@ -172,6 +172,570 @@ In short, workflow is something like this:
   <category><![CDATA[Emacs]]></category>
   <link>https://emacsbliss.com/2019-02-17-search-replace-with-emacs.html</link>
   <pubDate>Sun, 17 Feb 2019 22:09:00 -0500</pubDate>
+</item>
+<item>
+  <title><![CDATA[Emacs is an awesome git client]]></title>
+  <description><![CDATA[
+<p>
+Emacs is much more than just a text editor in many ways. It&rsquo;s an excellent File Explorer(with <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Dired.html">dired</a>), notes organizer and GTD tool (with <code>Org mode</code>) and much more.
+</p>
+
+<p>
+Among so many roles Emacs can be,it&rsquo;s also an <b>awesome</b> Git client across multiple platforms including macOS, Linux and Windows.
+</p>
+
+<div id="outline-container-necessary-packages" class="outline-2">
+<h2 id="necessary-packages">necessary packages</h2>
+<div class="outline-text-2" id="text-necessary-packages">
+<p>
+This is made possible via several Emacs packages:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://magit.vc/">Magit</a></li>
+<li><a href="https://github.com/emacs-evil/evil-magit">evil-magit</a></li>
+<li><a href="https://gitlab.com/pidu/git-timemachine/">Git time machine</a></li>
+<li><a href="https://github.com/syohex/emacs-git-gutter-fringe">Git gutter fringe</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-magit-magical" class="outline-2">
+<h2 id="magit-magical">Magit is magical</h2>
+<div class="outline-text-2" id="text-magit-magical">
+<p>
+Among all these packages, <code>Magit</code> is the most critical one and does most of the heavy lifting. It alone enables me to perform all the git operations I can
+think of.
+</p>
+
+<p>
+Magit website has an excellent <a href="https://magit.vc/screenshots/">guide</a> to walk you through all the basic things like:
+</p>
+
+<ul class="org-ul">
+<li>show the current repository status</li>
+<li>stage/commit files/changes</li>
+<li>show git log history and move through logs</li>
+<li>rebase/merge/branching</li>
+<li>diffing</li>
+</ul>
+
+<p>
+There are a few things from Magit I particularly like because they&rsquo;re <b>MUCH</b> easier with magit than the git CLI or even some other git tools.
+</p>
+
+<p>
+Here&rsquo;s my list:
+</p>
+
+<ul class="org-ul">
+<li>stage a particular <code>hunk</code> of a file</li>
+<li>quickly discard changes to files/hunks</li>
+<li>list all the commits affecting a particular file</li>
+<li>list all the commits affecting a particular function</li>
+</ul>
+
+<p>
+Magit is really sweet for git, but as I&rsquo;m so used to Vim editing mode(that&rsquo;s where the <code>evil</code> package really shines), I want to use Vim keybinding for operating magit buffer (for eg, use <code>hjkl</code> for navigating). <code>evil-magit</code> makes me feel right at home.
+</p>
+</div>
+</div>
+
+<div id="outline-container-time-travelling" class="outline-2">
+<h2 id="time-travelling">time travelling</h2>
+<div class="outline-text-2" id="text-time-travelling">
+<p>
+I realized there are times I want to see a particular version for a given file or just traverse through versions; <code>git time machine</code> is the package that helps me with that. However I need a little <a href="http://blog.binchen.org/posts/new-git-timemachine-ui-based-on-ivy-mode.html">tweak</a> so I can select the particular version as the starting point (other than current head).
+</p>
+
+<p>
+After starting the git time machine, you can use <code>p</code> to go to the previous version while <code>n</code> goes to the next version. There is also a line at the top of the buffer to indicate which version you&rsquo;re looking at along with other relevant information.
+</p>
+
+<p>
+See it in action below:
+<img src="static/img/git-time-machine.gif" alt="git-time-machine.gif">
+</p>
+</div>
+</div>
+
+<div id="outline-container-show-indication-changes" class="outline-2">
+<h2 id="show-indication-changes">show indication of changes in real time</h2>
+<div class="outline-text-2" id="text-show-indication-changes">
+<p>
+Sometimes we may also find it helpful that Emacs will show the indication that some lines are changed since the last commit on the fringe of the buffer for whatever reason, that&rsquo;s what <code>git gutter fringe</code> package is for.
+</p>
+
+<p>
+It will give you the visual indication on the left fringe of the current buffer if there is change, something like this:
+</p>
+
+<p>
+Again, with a little <a href="http://blog.binchen.org/posts/enhance-emacs-git-gutter-with-ivy-mode.html">tweak</a> we can easily get a list of changes in the current buffer and jump to the one I&rsquo;m interested in:
+</p>
+
+
+<figure id="org7087543">
+<img src="static/img/git-gutter.gif" alt="git-gutter.gif">
+
+</figure>
+</div>
+</div>
+
+<div id="outline-container-my-workflow" class="outline-2">
+<h2 id="my-workflow">my workflow</h2>
+<div class="outline-text-2" id="text-my-workflow">
+<p>
+There are basically two workflows for me.
+</p>
+
+<p>
+If I just want to do things like the following with the current file:
+</p>
+
+<ul class="org-ul">
+<li>get diff for changes</li>
+<li>get list of commits</li>
+<li>get list of commits affect a function</li>
+<li>stage current file</li>
+</ul>
+
+<p>
+Then I just invoke the key binding corresponds to the <code>magit</code> command without openning <code>magit status buffer</code>.
+</p>
+
+<p>
+However if I want to:
+</p>
+<ul class="org-ul">
+<li>get the status of a repository</li>
+<li>stage/unstage certain files</li>
+<li>commit current staged changes</li>
+<li>pull/push from remote</li>
+<li>branching/merging</li>
+</ul>
+
+<p>
+then I would use <code>magit-status</code> (I bound to <code>SPC g s</code>) to launch the magit status buffer and start from there.
+</p>
+
+<p>
+Here is a demo showing some of the operations mentioned above:
+</p>
+
+
+<figure id="org761b29e">
+<img src="static/img/emacs-git-client.gif" alt="emacs-git-client.gif">
+
+</figure>
+</div>
+
+<div id="outline-container-keybinding" class="outline-3">
+<h3 id="keybinding">keybinding</h3>
+<div class="outline-text-3" id="text-keybinding">
+<p>
+I use <code>space</code> as <code>leader</code> key for <code>Evil</code> mode, and all git related functions are
+bound to <code>g</code> using package <a href="https://github.com/noctuid/general.el">general</a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(general-define-key
+ <span style="color: #3a81c3;">:states</span> '(normal visual insert emacs)
+ <span style="color: #3a81c3;">:keymaps</span> 'override
+ <span style="color: #3a81c3;">:prefix</span> <span style="color: #2d9574;">"SPC"</span>
+ <span style="color: #3a81c3;">:non-normal-prefix</span> <span style="color: #2d9574;">"M-m"</span>
+
+ <span style="color: #2d9574;">"g"</span> '(<span style="color: #3a81c3;">:ignore</span> t <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git"</span>)
+ <span style="color: #2d9574;">"gs"</span> '(magit-status <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git status"</span>)
+ <span style="color: #2d9574;">"ga"</span> '(magit-stage-file <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"stage this file"</span>)
+ <span style="color: #2d9574;">"gb"</span> '(magit-blame <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git blame"</span>)
+ <span style="color: #2d9574;">"gc"</span> '(magit-commit <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git commit"</span>)
+ <span style="color: #2d9574;">"gd"</span> '(magit-diff-buffer-file <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git diff"</span>)
+ <span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">list commits affect current function</span>
+ <span style="color: #2d9574;">"gf"</span> '(magit-log-trace-definition <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"show commits for this function"</span>)
+ <span style="color: #2aa1ae; background-color: #ecf3ec;">;; </span><span style="color: #2aa1ae; background-color: #ecf3ec;">list commits affect current file</span>
+ <span style="color: #2d9574;">"gl"</span> '(magit-log-buffer-file <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"show commits for this file"</span>)
+ <span style="color: #2d9574;">"gg"</span> '(hydra-git/body <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git gutter"</span>)
+ <span style="color: #2d9574;">"gp"</span> '(magit-push-current <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git push"</span>)
+ <span style="color: #2d9574;">"gt"</span> '(my-git-timemachine <span style="color: #3a81c3;">:which-key</span> <span style="color: #2d9574;">"Git time machine"</span>)
+)
+</pre>
+</div>
+
+<p>
+So pressing <code>Space g</code> will show a list of available keys:
+</p>
+
+
+<figure id="org1cb892f">
+<img src="static/img/git-keybinding.png" alt="git-keybinding.png">
+
+</figure>
+
+<p>
+There is also a nice <a href="https://kapeli.com/cheat_sheets/Magit_for_Emacs.docset/Contents/Resources/Documents/index">cheatsheet</a> from excellent API documentation browser software: <a href="https://kapeli.com/dash">Dash.</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-conclusion" class="outline-2">
+<h2 id="conclusion">Conclusion</h2>
+<div class="outline-text-2" id="text-conclusion">
+<p>
+Hopefully by now you have seen how awesome Emacs is as a git client.
+</p>
+
+<p>
+It&rsquo;s pretty much a no-brainer for anyone who already uses Emacs day to day to adopt those packages (IF they have not done so).
+</p>
+
+<p>
+But even for non-Emacs user, if you need to work with git, I would still recommend it even this is the <b>ONLY</b> thing you use Emacs for.
+</p>
+
+<p>
+With all these packages and a little bit of customization Emacs turns into a top-notch and <b>FREE</b> (also across platform) git client.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-emacs.html">Emacs</a> <a href="https://emacsbliss.com/tag-git.html">Git</a> </div>]]></description>
+  <category><![CDATA[Emacs]]></category>
+  <category><![CDATA[Git]]></category>
+  <link>https://emacsbliss.com/2018-09-09-emacs-is-an-awesome-git-client.html</link>
+  <pubDate>Sun, 09 Sep 2018 21:26:00 -0400</pubDate>
+</item>
+<item>
+  <title><![CDATA[annoyance with paste in Evil visual mode]]></title>
+  <description><![CDATA[
+<p>
+I like <code>Evil</code> mode and use it all the time with my Emacs configuration.
+</p>
+
+<p>
+One thing I often do is copy some text with <code>y</code> and select some text in <code>visual mode</code> followed by using <code>p</code> or <code>P</code> to replace it with what I have just copied.
+</p>
+
+<p>
+However what really annoys me is that every time after I press <code>p</code> or <code>P</code> ,
+the content(ie. visual selection) being replaced is saved to the top of <code>kill-ring</code> which ruined my next paste operation with <code>p</code> or <code>P</code> since <code>kill-ring</code> has been changed.
+</p>
+
+<p>
+After consulting the <a href="https://github.com/Wilfred/helpful">helpful</a>, it shows that command invoked for pasting in visual mode is <code>evil-visual-paste</code> defined in <code>evil-commands.el</code>.
+</p>
+
+<p>
+Skimming through the function, this line is what I&rsquo;m looking for:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #3a81c3; font-weight: bold;">when</span> evil-kill-on-visual-paste
+        (kill-new new-kill))
+</pre>
+</div>
+
+<p>
+Basically it will save whatever in visual selection and push it to the top of <code>kill-ring</code> if variable <code>evil-kill-on-visual-paste</code> is true.
+</p>
+
+<p>
+This variable is defined here as following (in <code>evil-vars.el</code>):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(defcustom evil-kill-on-visual-paste t
+  <span style="color: #da8b55;">"Whether ~evil-visual-paste' adds the replaced text to the kill</span>
+<span style="color: #da8b55;">ring, making it the default for the next paste. The default, t,</span>
+<span style="color: #da8b55;">replicates the default vim behavior."</span>
+  <span style="color: #3a81c3;">:type</span> 'boolean
+  <span style="color: #3a81c3;">:group</span> 'evil)
+</pre>
+</div>
+
+<p>
+So by setting this variable to false that annoyance goes away:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setq evil-kill-on-visual-paste nil)
+</pre>
+</div>
+<div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-emacs.html">Emacs</a> <a href="https://emacsbliss.com/tag-evil-mode.html">Evil-mode</a> </div>]]></description>
+  <category><![CDATA[Emacs]]></category>
+  <category><![CDATA[Evil-mode]]></category>
+  <link>https://emacsbliss.com/2018-09-02-evil-paste-annoy.html</link>
+  <pubDate>Sun, 02 Sep 2018 22:16:00 -0400</pubDate>
+</item>
+<item>
+  <title><![CDATA[Go to column in Emacs]]></title>
+  <description><![CDATA[
+<p>
+I was looking for a command/function to jump to a specific column in emacs.
+It turned out there is already one built in emacs: <code>move-to-column</code> and is bind to <code>M-g Tab</code>.
+</p>
+
+<p>
+Even better <code>Evil</code> has already defined a command <code>evil-goto-column</code> and
+by default it&rsquo;s bind to <code>|</code>.
+</p>
+
+<p>
+So to jump to column 10 in evil normal mode, do this:
+</p>
+
+<pre class="example" id="orgb9c5044">
+10 |
+</pre>
+
+<p>
+NOTE: column number is <b>0 based</b>
+</p>
+<div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-emacs.html">Emacs</a> <a href="https://emacsbliss.com/tag-evil-mode.html">Evil-mode</a> </div>]]></description>
+  <category><![CDATA[Emacs]]></category>
+  <category><![CDATA[Evil-mode]]></category>
+  <link>https://emacsbliss.com/2018-09-03-go-to-column-in-emacs.html</link>
+  <pubDate>Fri, 03 Aug 2018 21:18:00 -0400</pubDate>
+</item>
+<item>
+  <title><![CDATA[clear iOS camera roll with Pythonista]]></title>
+  <description><![CDATA[
+<p>
+Sometimes I find the need to clear the camera roll on my iPhone
+after I have backed up to free up the storage. Interestingly
+Apple doesn&rsquo;t offer a simple way to do it and it would become a
+drag if I need to select all the photos by tapping on each of them.
+</p>
+
+<p>
+There appears to be few ways to achieve this. One approach requires connect
+iPhone to computer which I rarely do if never.
+</p>
+
+<p>
+Another approach requires using 3rd party app like <code>Gemini Photos</code> which seems
+to be ok.
+</p>
+
+<p>
+However given I have purchased a fantastic app <a href="https://itunes.apple.com/us/app/pythonista-3/id1085978097?mt=8">Pythonista 3</a> and I like using
+python, so I figured if I can achieve this with the app.
+</p>
+
+<p>
+And answer is a sure yes.
+</p>
+
+<div id="outline-container-pythonista-photos-module" class="outline-2">
+<h2 id="pythonista-photos-module">Pythonista photos module</h2>
+<div class="outline-text-2" id="text-pythonista-photos-module">
+<p>
+<code>Pythonista</code> provides a module called <code>photos</code> which can be used to do a LOT
+of things to your photos on your ios device.
+</p>
+
+<p>
+Before we diving into the final code, I would like to explain few concepts involved
+really quick to help understand the code.
+</p>
+
+<p>
+<code>AssetCollection</code> is the corresponding python type for a photo album. It holds
+a list of <code>Asset</code> object which contains two pieces information: metadata and image data
+for a photo.
+</p>
+</div>
+</div>
+<div id="outline-container-clear-camera-roll" class="outline-2">
+<h2 id="clear-camera-roll">clear the camera roll</h2>
+<div class="outline-text-2" id="text-clear-camera-roll">
+<p>
+<code>photos</code> module provides <code>get_albums</code> and <code>get_smart_albums</code> method to retrieve
+an photo album which is <code>AssetCollection</code> object as aforementioned.
+</p>
+
+<p>
+Since I want to clear the <code>Camera Roll</code> and only <code>get_smart_albums</code> return would
+include it, so we will be using it to begin with.
+</p>
+
+<p>
+Next step is straightforward, get the <code>Camera Roll</code> from return result of <code>get_smart_albums</code>
+by checking the <code>title</code> of an album.
+</p>
+
+<p>
+After that we can just delete all the photos from the album by invoking <code>photos.batch_delete()</code>.
+That method requires a list of <code>Asset</code> object and <code>AssetCollection.assets</code> property is what we need.
+</p>
+
+<p>
+That&rsquo;s it!
+</p>
+
+<p>
+Here&rsquo;s all the code:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #3a81c3; font-weight: bold;">import</span> photos
+<span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #b1951d;">NOTE:</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> return of this will not include camera roll</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;"># a = photos.get_albums()</span>
+
+<span style="color: #2aa1ae; background-color: #ecf3ec;"># return of this will include camera roll</span>
+<span style="color: #715ab1;">albums</span> <span style="color: #3a81c3; font-weight: bold;">=</span> photos.<span style="color: #2aa1ae; font-weight: bold; font-style: italic;">get_smart_albums</span>()
+<span style="color: #715ab1;">camera_roll</span> <span style="color: #3a81c3; font-weight: bold;">=</span> [a <span style="color: #3a81c3; font-weight: bold;">for</span> <span style="color: #715ab1;">a</span> <span style="color: #3a81c3; font-weight: bold;">in</span> albums <span style="color: #3a81c3; font-weight: bold;">if</span> a.<span style="color: #4e3163; font-style: italic;">title</span> <span style="color: #3a81c3; font-weight: bold;">==</span> <span style="color: #2d9574;">'Camera Roll'</span>][<span style="color: #4e3163;">0</span>]
+photos.<span style="color: #2aa1ae; font-weight: bold; font-style: italic;">batch_delete</span>(camera_roll.<span style="color: #4e3163; font-style: italic;">assets</span>)
+
+<span style="color: #2aa1ae; background-color: #ecf3ec;"># </span><span style="color: #b1951d;">NOTE:</span><span style="color: #2aa1ae; background-color: #ecf3ec;"> this will not work! see photos module documentation</span>
+<span style="color: #2aa1ae; background-color: #ecf3ec;">#camera_roll.remove_assets(camera_roll.assets)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-action" class="outline-2">
+<h2 id="action">action</h2>
+<div class="outline-text-2" id="text-action">
+<p>
+After you run the script, iOS will popup a confirmation dialog before it actually
+deletes all the photos.
+</p>
+
+<p>
+Once you tap <code>Delete</code> button, all photos are gone.
+I figure it&rsquo;s nice and easy enough for me, if you own the <code>Pythonista</code> already,
+it might be worth a try.
+</p>
+
+<p>
+This is tested with my iPhone6 (running iOS 11.3).
+</p>
+
+<p>
+<code>photos</code> module provides much more functionality than this, you can explore
+its <a href="http://omz-software.com/pythonista/docs/ios/photos.html">documentation</a> to find out other use cases.
+</p>
+</div>
+</div>
+<div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-python.html">python</a> <a href="https://emacsbliss.com/tag-ios.html">iOS</a> </div>]]></description>
+  <category><![CDATA[python]]></category>
+  <category><![CDATA[iOS]]></category>
+  <link>https://emacsbliss.com/2018-04-25-clear-ios-camera-roll-with-pythonista.html</link>
+  <pubDate>Wed, 25 Apr 2018 21:22:00 -0400</pubDate>
+</item>
+<item>
+  <title><![CDATA[Just enough docker for synology]]></title>
+  <description><![CDATA[
+<p>
+Docker is really great for many purposes, it&rsquo;s even
+more valuable for NAS device like Synology. It provides
+so much more possibilities and expands functionality greatly.
+</p>
+
+<p>
+Synology DSM adds a nice web GUI for its docker package so
+most of the work can be done in UI fashion without even knowing
+any commands for docker.
+</p>
+
+<p>
+That is pretty much the case for me initially, but later I played
+more with docker it inevitably requires knowledge of few docker
+commands, not too much though.
+</p>
+
+<div id="outline-container-get-docker-shell" class="outline-2">
+<h2 id="get-docker-shell">get a docker shell as root</h2>
+<div class="outline-text-2" id="text-get-docker-shell">
+<p>
+this would be useful and no need to get into container with ssh:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker exec -u <span style="color: #4e3163;">0</span> -it &lt;container name&gt; bash
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-copy-file-from" class="outline-2">
+<h2 id="copy-file-from">copy file from docker to host</h2>
+<div class="outline-text-2" id="text-copy-file-from">
+<p>
+Another thing can&rsquo;t do with web GUI in synology docker package:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">docker <span style="color: #ba2f59; font-weight: bold;">cp</span> &lt;containerId&gt;:/file/path/within/container /host/path/target
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container--copy-file" class="outline-2">
+<h2 id="-copy-file">copy file from host to docker</h2>
+<div class="outline-text-2" id="text--copy-file">
+<p>
+This maybe less often than copy file from docker to host, but still sometimes
+it might be useful, it&rsquo;s pretty much same as previous one:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker <span style="color: #ba2f59; font-weight: bold;">cp</span> /host/path/target &lt;containerId&gt;:/file/path/within/container
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-docker-permission-issue" class="outline-2">
+<h2 id="docker-permission-issue">docker permission issue with volume from synology host</h2>
+<div class="outline-text-2" id="text-docker-permission-issue">
+<p>
+One thing I encountered is when I mount a host directory into docker, I may get
+the error saying docker can&rsquo;t read/write it due to permission issue.
+</p>
+
+<p>
+The way to solve it is basically to provide extra environment variable <code>PGID</code> and
+<code>PUID</code> for docker. <code>PGID</code> and <code>PUID</code> being the group/user id for the host directory owner.
+In Synology DSM case it&rsquo;s most likely to be <code>101</code> for <code>PGID</code> and <code>1026</code> for <code>PUID</code>. <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+</div>
+</div>
+
+<div id="outline-container-docker-mount-volume" class="outline-2">
+<h2 id="docker-mount-volume">docker mount volume trap</h2>
+<div class="outline-text-2" id="text-docker-mount-volume">
+<p>
+This is a bit tricky and took me a while to figured out by experiment. Basically
+if you mount a host directory into a docker path which docker container also have
+that path, then docker would ONLY recognize the top level and the sub-directory is
+actually still from docker container itself.
+</p>
+
+<p>
+For example when I configure the <code>ghost</code> container, I mount a host directory <code>/docker/ghost</code>
+into docker path <code>/var/lib/ghost</code>. Later it turned out the path <code>/var/lib/ghost/content</code> referenced
+by <code>ghost</code> is from docker itself, not my host path <code>/docker/ghost/content</code>.
+</p>
+
+<p>
+To force docker uses host path, we need to do a second mount by mapping <code>/docker/ghost/content</code> explicitly
+to <code>/var/lib/ghost/content</code> which is a bit surprising to me..
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://drfrankenstein.co.uk/2016/03/26/setting-up-sabnzbd-in-docker-on-a-synology-nas">https://drfrankenstein.co.uk/2016/03/26/setting-up-sabnzbd-in-docker-on-a-synology-nas</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-synology.html">synology</a> <a href="https://emacsbliss.com/tag-dsm.html">DSM</a> </div>]]></description>
+  <category><![CDATA[synology]]></category>
+  <category><![CDATA[DSM]]></category>
+  <link>https://emacsbliss.com/2018-04-23-just-enough-docker-for-synology.html</link>
+  <pubDate>Mon, 23 Apr 2018 21:20:00 -0400</pubDate>
 </item>
 </channel>
 </rss>

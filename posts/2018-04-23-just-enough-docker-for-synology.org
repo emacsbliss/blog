@@ -1,0 +1,57 @@
+#+title: Just enough docker for synology
+#+date: <2018-04-23 21:20>
+#+description: Just enough commands to work with docker for synology DSM
+#+filetags: synology DSM
+
+Docker is really great for many purposes, it's even
+more valuable for NAS device like Synology. It provides
+so much more possibilities and expands functionality greatly.
+
+Synology DSM adds a nice web GUI for its docker package so
+most of the work can be done in UI fashion without even knowing
+any commands for docker.
+
+That is pretty much the case for me initially, but later I played
+more with docker it inevitably requires knowledge of few docker
+commands, not too much though.
+
+* get a docker shell as root
+this would be useful and no need to get into container with ssh:
+#+BEGIN_SRC sh
+docker exec -u 0 -it <container name> bash
+#+END_SRC
+* copy file from docker to host
+Another thing can't do with web GUI in synology docker package:
+
+#+BEGIN_SRC sh
+docker cp <containerId>:/file/path/within/container /host/path/target
+#+END_SRC
+* copy file from host to docker
+This maybe less often than copy file from docker to host, but still sometimes
+it might be useful, it's pretty much same as previous one:
+#+BEGIN_SRC sh
+docker cp /host/path/target <containerId>:/file/path/within/container
+#+END_SRC
+
+* docker permission issue with volume from synology host
+One thing I encountered is when I mount a host directory into docker, I may get
+the error saying docker can't read/write it due to permission issue.
+
+The way to solve it is basically to provide extra environment variable ~PGID~ and
+~PUID~ for docker. ~PGID~ and ~PUID~ being the group/user id for the host directory owner.
+In Synology DSM case it's most likely to be ~101~ for ~PGID~ and ~1026~ for ~PUID~. [fn:1]
+
+* docker mount volume trap
+This is a bit tricky and took me a while to figured out by experiment. Basically
+if you mount a host directory into a docker path which docker container also have
+that path, then docker would ONLY recognize the top level and the sub-directory is
+actually still from docker container itself.
+
+For example when I configure the ~ghost~ container, I mount a host directory ~/docker/ghost~
+into docker path ~/var/lib/ghost~. Later it turned out the path ~/var/lib/ghost/content~ referenced
+by ~ghost~ is from docker itself, not my host path ~/docker/ghost/content~.
+
+To force docker uses host path, we need to do a second mount by mapping ~/docker/ghost/content~ explicitly
+to ~/var/lib/ghost/content~ which is a bit surprising to me..
+
+[fn:1] https://drfrankenstein.co.uk/2016/03/26/setting-up-sabnzbd-in-docker-on-a-synology-nas

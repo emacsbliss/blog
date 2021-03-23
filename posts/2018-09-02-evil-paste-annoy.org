@@ -1,7 +1,7 @@
 #+title: annoyance with paste in Evil visual mode
 #+date: <2018-09-02 22:16>
 #+description: Evil mode is really nice, but needs some tweaks.
-#+filetags: Emacs EVIL-mode
+#+filetags: Emacs Evil-mode
 
 I like ~Evil~ mode and use it all the time with my Emacs configuration.
 

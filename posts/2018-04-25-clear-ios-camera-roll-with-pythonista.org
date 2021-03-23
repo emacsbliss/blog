@@ -1,0 +1,74 @@
+#+title: clear iOS camera roll with Pythonista
+#+date: <2018-04-25 21:22>
+#+description: clear iOS camera roll with Pythonista
+#+filetags: python iOS
+
+Sometimes I find the need to clear the camera roll on my iPhone
+after I have backed up to free up the storage. Interestingly
+Apple doesn't offer a simple way to do it and it would become a
+drag if I need to select all the photos by tapping on each of them.
+
+There appears to be few ways to achieve this. One approach requires connect
+iPhone to computer which I rarely do if never.
+
+Another approach requires using 3rd party app like ~Gemini Photos~ which seems
+to be ok.
+
+However given I have purchased a fantastic app [[https://itunes.apple.com/us/app/pythonista-3/id1085978097?mt=8][Pythonista 3]] and I like using
+python, so I figured if I can achieve this with the app.
+
+And answer is a sure yes.
+
+* Pythonista photos module
+~Pythonista~ provides a module called ~photos~ which can be used to do a LOT
+of things to your photos on your ios device.
+
+Before we diving into the final code, I would like to explain few concepts involved
+really quick to help understand the code.
+
+~AssetCollection~ is the corresponding python type for a photo album. It holds
+a list of ~Asset~ object which contains two pieces information: metadata and image data
+for a photo.
+* clear the camera roll
+~photos~ module provides ~get_albums~ and ~get_smart_albums~ method to retrieve
+an photo album which is ~AssetCollection~ object as aforementioned.
+
+Since I want to clear the ~Camera Roll~ and only ~get_smart_albums~ return would
+include it, so we will be using it to begin with.
+
+Next step is straightforward, get the ~Camera Roll~ from return result of ~get_smart_albums~
+by checking the ~title~ of an album.
+
+After that we can just delete all the photos from the album by invoking ~photos.batch_delete()~.
+That method requires a list of ~Asset~ object and ~AssetCollection.assets~ property is what we need.
+
+That's it!
+
+Here's all the code:
+
+#+BEGIN_SRC python
+import photos
+# NOTE: return of this will not include camera roll
+# a = photos.get_albums()
+
+# return of this will include camera roll
+albums = photos.get_smart_albums()
+camera_roll = [a for a in albums if a.title == 'Camera Roll'][0]
+photos.batch_delete(camera_roll.assets)
+
+# NOTE: this will not work! see photos module documentation
+#camera_roll.remove_assets(camera_roll.assets)
+#+END_SRC
+
+* action
+After you run the script, iOS will popup a confirmation dialog before it actually
+deletes all the photos.
+
+Once you tap ~Delete~ button, all photos are gone.
+I figure it's nice and easy enough for me, if you own the ~Pythonista~ already,
+it might be worth a try.
+
+This is tested with my iPhone6 (running iOS 11.3).
+
+~photos~ module provides much more functionality than this, you can explore
+its [[http://omz-software.com/pythonista/docs/ios/photos.html][documentation]] to find out other use cases.

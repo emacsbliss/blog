@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="https://emacsbliss.com/rss.xml"
+      title="RSS feed for https://emacsbliss.com/">
+<title>EmacsBliss</title>
+<meta name="author" content="EmacsBliss">
+        <meta name="referrer" content="no-referrer">
+        <link href= "static/org-notes-style.css" rel="stylesheet" type="text/css" />
+        <link rel="icon" href="static/favicon.ico"></head>
+<body>
+<div id="preamble" class="status"><div class="header">
+           <a href="https://emacsbliss.com">Emacs Bliss</a>
+           <div class="sitelinks">
+             <a href="https://github.com/emacsbliss">Github</a>
+           </div>
+        </div></div>
+<div id="content">
+<h1 class="title">Posts tagged "synology":</h1>
+<div class="post-date">23 Apr 2018</div><h1 class="post-title"><a href="https://emacsbliss.com/2018-04-23-just-enough-docker-for-synology.html">Just enough docker for synology</a></h1>
+<p>
+Docker is really great for many purposes, it&rsquo;s even
+more valuable for NAS device like Synology. It provides
+so much more possibilities and expands functionality greatly.
+</p>
+
+<p>
+Synology DSM adds a nice web GUI for its docker package so
+most of the work can be done in UI fashion without even knowing
+any commands for docker.
+</p>
+
+<p>
+That is pretty much the case for me initially, but later I played
+more with docker it inevitably requires knowledge of few docker
+commands, not too much though.
+</p>
+
+<div id="outline-container-get-docker-shell" class="outline-2">
+<h2 id="get-docker-shell">get a docker shell as root</h2>
+<div class="outline-text-2" id="text-get-docker-shell">
+<p>
+this would be useful and no need to get into container with ssh:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker exec -u <span style="color: #4e3163;">0</span> -it &lt;container name&gt; bash
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-copy-file-from" class="outline-2">
+<h2 id="copy-file-from">copy file from docker to host</h2>
+<div class="outline-text-2" id="text-copy-file-from">
+<p>
+Another thing can&rsquo;t do with web GUI in synology docker package:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">docker <span style="color: #ba2f59; font-weight: bold;">cp</span> &lt;containerId&gt;:/file/path/within/container /host/path/target
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container--copy-file" class="outline-2">
+<h2 id="-copy-file">copy file from host to docker</h2>
+<div class="outline-text-2" id="text--copy-file">
+<p>
+This maybe less often than copy file from docker to host, but still sometimes
+it might be useful, it&rsquo;s pretty much same as previous one:
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">docker <span style="color: #ba2f59; font-weight: bold;">cp</span> /host/path/target &lt;containerId&gt;:/file/path/within/container
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-docker-permission-issue" class="outline-2">
+<h2 id="docker-permission-issue">docker permission issue with volume from synology host</h2>
+<div class="outline-text-2" id="text-docker-permission-issue">
+<p>
+One thing I encountered is when I mount a host directory into docker, I may get
+the error saying docker can&rsquo;t read/write it due to permission issue.
+</p>
+
+<p>
+The way to solve it is basically to provide extra environment variable <code>PGID</code> and
+<code>PUID</code> for docker. <code>PGID</code> and <code>PUID</code> being the group/user id for the host directory owner.
+In Synology DSM case it&rsquo;s most likely to be <code>101</code> for <code>PGID</code> and <code>1026</code> for <code>PUID</code>. <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+</div>
+</div>
+
+<div id="outline-container-docker-mount-volume" class="outline-2">
+<h2 id="docker-mount-volume">docker mount volume trap</h2>
+<div class="outline-text-2" id="text-docker-mount-volume">
+<p>
+This is a bit tricky and took me a while to figured out by experiment. Basically
+if you mount a host directory into a docker path which docker container also have
+that path, then docker would ONLY recognize the top level and the sub-directory is
+actually still from docker container itself.
+</p>
+
+<p>
+For example when I configure the <code>ghost</code> container, I mount a host directory <code>/docker/ghost</code>
+into docker path <code>/var/lib/ghost</code>. Later it turned out the path <code>/var/lib/ghost/content</code> referenced
+by <code>ghost</code> is from docker itself, not my host path <code>/docker/ghost/content</code>.
+</p>
+
+<p>
+To force docker uses host path, we need to do a second mount by mapping <code>/docker/ghost/content</code> explicitly
+to <code>/var/lib/ghost/content</code> which is a bit surprising to me..
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<a href="https://drfrankenstein.co.uk/2016/03/26/setting-up-sabnzbd-in-docker-on-a-synology-nas">https://drfrankenstein.co.uk/2016/03/26/setting-up-sabnzbd-in-docker-on-a-synology-nas</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"><a href="https://emacsbliss.com/tags.html">Tags</a>: <a href="https://emacsbliss.com/tag-synology.html">synology</a> <a href="https://emacsbliss.com/tag-dsm.html">DSM</a> </div><div id="archive">
+<a href="https://emacsbliss.com/archive.html">Other posts</a>
+</div>
+</div>
+<div id="postamble" class="status"><div id="archive">
+        <a href="https://staticblog.org/archive.html">Other posts</a>
+        </div>
+        <center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">EmacsBliss</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://emacsbliss.com" property="cc:attributionName" rel="cc:attributionURL">EmacsBliss</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
